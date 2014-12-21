@@ -498,6 +498,16 @@ int IRrecv::decodeOnlyHash(decode_results *results) {
   if (irparams.rcvstate != STATE_STOP) {
     return ERR;
   }
+  // NEC repeats are too short for decodeHash
+  if (irparams.rawlen == 4 && 
+      MATCH_MARK(results->rawbuf[1], NEC_HDR_MARK) &&
+      MATCH_SPACE(results->rawbuf[2], NEC_RPT_SPACE) &&
+      MATCH_MARK(results->rawbuf[3], NEC_BIT_MARK)) {
+    results->bits = 0;
+    results->value = REPEAT;
+    results->decode_type = NEC;
+    return DECODED;
+  }
   // decodeHash returns a hash on any input.
   // Thus, it needs to be last in the list.
   // If you add any decodes, add them before this.
