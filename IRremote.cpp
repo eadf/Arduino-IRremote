@@ -489,6 +489,26 @@ int IRrecv::decode(decode_results *results) {
   return ERR;
 }
 
+// Decodes the received IR message
+// Returns 0 if no data ready, 1 if data ready.
+// Results of decoding are stored in results
+int IRrecv::decodeOnlyHash(decode_results *results) {
+  results->rawbuf = irparams.rawbuf;
+  results->rawlen = irparams.rawlen;
+  if (irparams.rcvstate != STATE_STOP) {
+    return ERR;
+  }
+  // decodeHash returns a hash on any input.
+  // Thus, it needs to be last in the list.
+  // If you add any decodes, add them before this.
+  if (decodeHash(results)) {
+    return DECODED;
+  }
+  // Throw away and start over
+  resume();
+  return ERR;
+}
+
 // NECs have a repeat only 4 items long
 long IRrecv::decodeNEC(decode_results *results) {
   long data = 0;
