@@ -6,6 +6,8 @@ To install, move the downloaded IRremote directory to:
 arduino-1.x/libraries/IRremote
 where arduino-1.x is your Arduino installation directory
 
+If you install this on Arduino 1.5.8 Beta or higher you will have to remove the conflicting built-in library with the same name.
+
 After installation you should have files such as:
 arduino-1.x/libraries/IRremote/IRremote.cpp
 
